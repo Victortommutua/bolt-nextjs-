@@ -1,6 +1,7 @@
 import { ArrowCircleLeftIcon, CursorClickIcon, XIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
+import {Jelly, Waveform, Orbit} from '@uiball/loaders'
 import {useJsApiLoader, GoogleMap, Marker, Autocomplete} from '@react-google-maps/api'
 const center ={lat:-1.294059 , lng:36.871502};
 function Map() {
@@ -9,19 +10,29 @@ function Map() {
     const [origin, setOrigin] = useState();
     const [destination, setDestination] = useState();
     const [direction, setDirection] = useState(null);
-    const {isLoaded} = useJsApiLoader({
-        googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    const [distance, setDistance] = useState('')
+    const [duration, setDuration] = useState('')
+    const {isLoaded, loadError} = useJsApiLoader({
+        googleMapsApiKey: 'AIzaSyBCXSVEMvHDclHn4--bGoKB5oFxorj4OQ0',
         libraries: ['places']
     });
-    if(!isLoaded){
-        return <ArrowCircleLeftIcon/>
+    if(!isLoaded || loadError){
+        return (
+         <div className='flex w-full items-center justify-center p-10 text-xl'>
+        <Jelly className='items-center' size={100} color='#FF4501'/>
+      </div>
+        )
     }
     const options = {
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_CENTER // 'right-center' ,
+        },
         zoomControl: false,
         streetViewControl: false,
         mapTypeControl:false,
         fullScreenControl: false,
     }
+    console.log('API KEY', process.env.GOOGLE_MAPS_API_KEY);
   return (
       <div className='relative '>
 <form className='sticky top-16 z-50 justify-center space-x-3'>
